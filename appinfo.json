@@ -1,0 +1,24 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "konsumer",
+    "longName": "Oblique Strategies",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "Oblique Strategies",
+    "targetPlatforms": [
+        "aplite",
+        "basalt",
+        "chalk"
+    ],
+    "uuid": "5944380e-3840-4d5f-897d-e03b9d4904b5",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
