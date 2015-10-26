@@ -137,27 +137,31 @@ static TextLayer *text_layer;
 static bool showing_time = true;
 
 static void update_time() {
-  time_t temp = time(NULL); 
-  struct tm *tick_time = localtime(&temp);
-  static char s_buffer[8];
-  strftime(s_buffer, sizeof(s_buffer), clock_is_24h_style() ? "%H:%M" : "%I:%M", tick_time);
-  text_layer_set_text(time_layer, s_buffer);
+  if (showing_time){
+    time_t temp = time(NULL); 
+    struct tm *tick_time = localtime(&temp);
+    static char s_buffer[8];
+    strftime(s_buffer, sizeof(s_buffer), clock_is_24h_style() ? "%H:%M" : "%I:%M", tick_time);
+    text_layer_set_text(time_layer, s_buffer);
+  }
 }
 
 static void update_strategy(){
-  Layer *root_window = window_get_root_layer(window_strategy);
-  srand(time(0));
-  char* text = strategies[rand() % ARR_SIZE(strategies)];
-  GRect bounds = layer_get_bounds(root_window);
-  text_layer = text_layer_create((GRect) { .origin = { 0, 0}, .size = { bounds.size.w, bounds.size.h } });
-  text_layer_set_text(text_layer, text);
-  GSize textSize = text_layer_get_content_size(text_layer);
-  // re-create text_layer, vertically centered
-  text_layer = text_layer_create((GRect) { .origin = { 0, (bounds.size.h/2) - (textSize.h/2) }, .size = { bounds.size.w, bounds.size.h } });
-  text_layer_set_text(text_layer, text);
-  text_layer_set_text_alignment(text_layer, GTextAlignmentCenter);
-  layer_remove_child_layers(root_window);
-  layer_add_child(root_window, text_layer_get_layer(text_layer));
+  if (!showing_time){
+    Layer *root_window = window_get_root_layer(window_strategy);
+    srand(time(0));
+    char* text = strategies[rand() % ARR_SIZE(strategies)];
+    GRect bounds = layer_get_bounds(root_window);
+    text_layer = text_layer_create((GRect) { .origin = { 0, 0}, .size = { bounds.size.w, bounds.size.h } });
+    text_layer_set_text(text_layer, text);
+    GSize textSize = text_layer_get_content_size(text_layer);
+    // re-create text_layer, vertically centered
+    text_layer = text_layer_create((GRect) { .origin = { 0, (bounds.size.h/2) - (textSize.h/2) }, .size = { bounds.size.w, bounds.size.h } });
+    text_layer_set_text(text_layer, text);
+    text_layer_set_text_alignment(text_layer, GTextAlignmentCenter);
+    layer_remove_child_layers(root_window);
+    layer_add_child(root_window, text_layer_get_layer(text_layer));
+  }
 }
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
