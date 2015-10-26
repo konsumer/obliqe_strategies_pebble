@@ -129,12 +129,11 @@ char* strategies[] = {
   ""
 };
 
-static Window *s_main_window;
-static TextLayer *s_time_layer;
+static Window *window_time;
+static TextLayer *time_layer;
 
 static Window *window_strategy;
 static TextLayer *text_layer;
-static Layer *root_window;
 static bool showing_time = true;
 
 static void update_time() {
@@ -142,10 +141,11 @@ static void update_time() {
   struct tm *tick_time = localtime(&temp);
   static char s_buffer[8];
   strftime(s_buffer, sizeof(s_buffer), clock_is_24h_style() ? "%H:%M" : "%I:%M", tick_time);
-  text_layer_set_text(s_time_layer, s_buffer);
+  text_layer_set_text(time_layer, s_buffer);
 }
 
 static void update_strategy(){
+  Layer *root_window = window_get_root_layer(window_strategy);
   srand(time(0));
   char* text = strategies[rand() % ARR_SIZE(strategies)];
   GRect bounds = layer_get_bounds(root_window);
@@ -167,17 +167,17 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 static void main_window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
-  s_time_layer = text_layer_create(GRect(0, (bounds.size.h/2) - 28, bounds.size.w, 50));
-  text_layer_set_background_color(s_time_layer, GColorClear);
-  text_layer_set_text_color(s_time_layer, GColorBlack);
-  text_layer_set_text(s_time_layer, "00:00");
-  text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_ROBOTO_BOLD_SUBSET_49));
-  text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
-  layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
+  time_layer = text_layer_create(GRect(0, (bounds.size.h/2) - 28, bounds.size.w, 50));
+  text_layer_set_background_color(time_layer, GColorClear);
+  text_layer_set_text_color(time_layer, GColorBlack);
+  text_layer_set_text(time_layer, "00:00");
+  text_layer_set_font(time_layer, fonts_get_system_font(FONT_KEY_ROBOTO_BOLD_SUBSET_49));
+  text_layer_set_text_alignment(time_layer, GTextAlignmentCenter);
+  layer_add_child(window_layer, text_layer_get_layer(time_layer));
 }
 
 static void main_window_unload(Window *window) {
-  text_layer_destroy(s_time_layer);
+  text_layer_destroy(time_layer);
 }
 
 static void tap_handler(AccelAxisType axis, int32_t direction) {
@@ -187,7 +187,8 @@ static void tap_handler(AccelAxisType axis, int32_t direction) {
     window_stack_push(window_strategy, true);
   }else{
     showing_time = true;
-    window_stack_push(s_main_window, true);
+    window_stack_pop_all(false);
+    window_stack_push(window_time, true);
     update_time();
   }
 }
@@ -201,16 +202,15 @@ static void window_unload_strategy(Window *window) {
 }
 
 static void init() {  
-  s_main_window = window_create();
-  window_set_window_handlers(s_main_window, (WindowHandlers) {
+  window_time = window_create();
+  window_set_window_handlers(window_time, (WindowHandlers) {
     .load = main_window_load,
     .unload = main_window_unload
   });
-  window_stack_push(s_main_window, true);
+  window_stack_push(window_time, true);
   update_time();
   
   window_strategy = window_create();
-  root_window = window_get_root_layer(window_strategy);
   window_set_window_handlers(window_strategy, (WindowHandlers) {
     .load = window_load_strategy,
     .unload = window_unload_strategy,
@@ -221,7 +221,7 @@ static void init() {
 }
 
 static void deinit() {
-  window_destroy(s_main_window);
+  window_destroy(window_time);
 }
 
 int main(void) {
