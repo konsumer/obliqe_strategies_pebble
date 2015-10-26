@@ -7,7 +7,14 @@
     "longName": "Oblique Strategies",
     "projectType": "native",
     "resources": {
-        "media": []
+        "media": [
+            {
+                "characterRegex": "[0-9:.amp]",
+                "file": "fonts/Bauhaus_.ttf",
+                "name": "FONT_BAUHAS_SUBSET_48",
+                "type": "font"
+            }
+        ]
     },
     "sdkVersion": "3",
     "shortName": "Oblique Strategies",
