@@ -164,7 +164,7 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   update_time();
 }
 
-static void main_window_load(Window *window) {
+static void window_load_time(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
   time_layer = text_layer_create(GRect(0, (bounds.size.h/2) - 28, bounds.size.w, 50));
@@ -176,7 +176,7 @@ static void main_window_load(Window *window) {
   layer_add_child(window_layer, text_layer_get_layer(time_layer));
 }
 
-static void main_window_unload(Window *window) {
+static void window_unload_time(Window *window) {
   text_layer_destroy(time_layer);
 }
 
@@ -204,8 +204,8 @@ static void window_unload_strategy(Window *window) {
 static void init() {  
   window_time = window_create();
   window_set_window_handlers(window_time, (WindowHandlers) {
-    .load = main_window_load,
-    .unload = main_window_unload
+    .load = window_load_time,
+    .unload = window_unload_time
   });
   window_stack_push(window_time, true);
   update_time();
