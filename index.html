@@ -55,7 +55,7 @@ $('button').on('click', function () {
     colorBackground: window.localStorage.colorBackground
   }
   var ret = getQueryParam('return_to', 'pebblejs://close#')
-  document.window.location = ret + encodeURIComponent(JSON.stringify(config))
+  window.location = ret + encodeURIComponent(JSON.stringify(config))
 })
 
 if (window.localStorage.colorForeground) {
