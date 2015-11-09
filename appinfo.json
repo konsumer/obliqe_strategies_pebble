@@ -1,7 +1,10 @@
 {
-    "appKeys": {},
+    "appKeys": {
+        "colorBackground": 1,
+        "colorForeground": 0
+    },
     "capabilities": [
-        ""
+        "configurable"
     ],
     "companyName": "konsumer",
     "longName": "Oblique Strategies",
@@ -24,7 +27,7 @@
         "chalk"
     ],
     "uuid": "5944380e-3840-4d5f-897d-e03b9d4904b5",
-    "versionLabel": "1.1",
+    "versionLabel": "1.2",
     "watchapp": {
         "watchface": true
     }
