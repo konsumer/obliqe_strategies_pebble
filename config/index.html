@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel='stylesheet' type='text/css' href='slate/css/slate.min.css'>
+</head>
+<body>
+  <div class='item-container'>
+    <h1 class='title'>Oblique Strategies</h1>
+  </div>
+
+  <div class='item-container'>
+    <div class='item-container-header'>Colors</div>
+    <div class='item-container-content'>
+      <label class='item'>
+        Background Color
+        <input id='bg' type='text' class='item-color item-color-sunny' value='0x000000'>
+      </label>
+      <label class='item'>
+        Foreground Color
+        <input id='fg' type='text' class='item-color item-color-sunny' value='0xFFFFFF'>
+      </label>
+    </div>
+    <div class='item-container-footer'>
+      These settings only change on the watch after you click save.
+    </div>
+  </div>
+
+  <div class='item-container'>
+    <div class='button-container'>
+      <button class='item-button'>SAVE</button>
+    </div>
+  </div>
+
+  <script src='slate/js/slate.min.js'></script>
+<script>
+/* global $  */
+
+function getQueryParam (variable, defaultValue) {
+  var vars = window.location.search.substring(1).split('&')
+  for (var i = vars.length; i--;) {
+    var pair = vars[i].split('=')
+    if (pair[0] === variable) {
+      return decodeURIComponent(pair[1])
+    }
+  }
+  return defaultValue || false
+}
+
+$('button').on('click', function () {
+  window.localStorage.colorForeground = $('#fg').val()
+  window.localStorage.colorBackground = $('#bg').val()
+  var config = {
+    colorForeground: window.localStorage.colorForeground,
+    colorBackground: window.localStorage.colorBackground
+  }
+  var ret = getQueryParam('return_to', 'pebblejs://close#')
+  document.window.location = ret + encodeURIComponent(JSON.stringify(config))
+})
+
+if (window.localStorage.colorForeground) {
+  $('#fg').val(window.localStorage.colorForeground)
+}
+
+if (window.localStorage.colorBackground) {
+  $('#bg').val(window.localStorage.colorBackground)
+}
+</script>
+</body>
+</html>
