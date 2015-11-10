@@ -57,7 +57,7 @@ $('button').on('click', function () {
   window.location = getQueryParam('return_to', 'pebblejs://close#') + encodeURIComponent(JSON.stringify(config))
 })
 
-if (window.localStorage.invert) {
+if (window.localStorage.invert && window.localStorage.invert === 'true') {
   $('#invert').attr('checked', true)
 }
 
