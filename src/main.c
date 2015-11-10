@@ -137,11 +137,13 @@ static TextLayer *text_layer;
 static bool showing_time = true;
 
 static void setColors(int bg, int fg){
+#ifdef PBL_COLOR
   GColor bgcolor = GColorFromHEX(bg);
   window_set_background_color(window_time, bgcolor);
   text_layer_set_background_color(time_layer, bgcolor);
   GColor fgcolor = GColorFromHEX(fg);
   text_layer_set_text_color(time_layer, fgcolor);
+#endif
 }
 
 static void update_time() {
