@@ -6,11 +6,12 @@ Pebble.addEventListener('showConfiguration', function () {
 
 Pebble.addEventListener('webviewclosed', function (e) {
   var config = JSON.parse(decodeURIComponent(e.response))
-  console.log(JSON.stringify(config))
-  Pebble.sendAppMessage({
+  var msg = {
     'color': parseInt(config.color, 16),
-    'invert': config.invert
-  }, function () {
+    'invert': config.invert === 'true' ? 1 : 0
+  }
+  console.log(JSON.stringify(msg))
+  Pebble.sendAppMessage(msg, function () {
     // success
   }, function () {
     // fail

@@ -140,16 +140,13 @@ static void setColors(int color, bool invert){
 #ifdef PBL_COLOR
   GColor bgcolor = GColorFromHEX(color);
   GColor fgcolor = gcolor_legible_over(bgcolor);
-
-  if(invert){
-    window_set_background_color(window_time, bgcolor);
-    text_layer_set_background_color(time_layer, bgcolor);
-    text_layer_set_text_color(time_layer, fgcolor);
-  }else{
-    window_set_background_color(window_time, fgcolor);
-    text_layer_set_background_color(time_layer, fgcolor);
-    text_layer_set_text_color(time_layer, fgcolor);
+  if (!invert){
+    bgcolor = fgcolor;
+    fgcolor = GColorFromHEX(color);
   }
+  window_set_background_color(window_time, bgcolor);
+  text_layer_set_background_color(time_layer, bgcolor);
+  text_layer_set_text_color(time_layer, fgcolor);
 #endif
 }
 
