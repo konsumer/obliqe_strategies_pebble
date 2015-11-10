@@ -136,13 +136,20 @@ static Window *window_strategy;
 static TextLayer *text_layer;
 static bool showing_time = true;
 
-static void setColors(int bg, int fg){
+static void setColors(int color, bool invert){
 #ifdef PBL_COLOR
-  GColor bgcolor = GColorFromHEX(bg);
-  window_set_background_color(window_time, bgcolor);
-  text_layer_set_background_color(time_layer, bgcolor);
-  GColor fgcolor = GColorFromHEX(fg);
-  text_layer_set_text_color(time_layer, fgcolor);
+  GColor bgcolor = GColorFromHEX(color);
+  GColor fgcolor = gcolor_legible_over(bgcolor);
+
+  if(invert){
+    window_set_background_color(window_time, bgcolor);
+    text_layer_set_background_color(time_layer, bgcolor);
+    text_layer_set_text_color(time_layer, fgcolor);
+  }else{
+    window_set_background_color(window_time, fgcolor);
+    text_layer_set_background_color(time_layer, fgcolor);
+    text_layer_set_text_color(time_layer, fgcolor);
+  }
 #endif
 }
 
@@ -183,9 +190,7 @@ static void window_load_time(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
   time_layer = text_layer_create(GRect(0, (bounds.size.h/2) - 26, bounds.size.w, 50));
-  int bg = persist_read_int(0);
-  int fg = persist_read_int(1);
-  setColors(bg, fg);
+  setColors(persist_read_int(0), persist_read_bool(1));
   text_layer_set_text(time_layer, "00:00");
   text_layer_set_font(time_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_BAUHAS_SUBSET_48)));
   text_layer_set_text_alignment(time_layer, GTextAlignmentCenter);
@@ -218,13 +223,13 @@ static void window_unload_strategy(Window *window) {
 }
 
 static void inbox_received_handler(DictionaryIterator *iter, void *context) {
-  Tuple *bgcolor = dict_find(iter, 0);
-  Tuple *fgcolor = dict_find(iter, 1);
-  int bg = bgcolor->value->uint32;
-  int fg = fgcolor->value->uint32;
+  Tuple *bgval= dict_find(iter, 0);
+  Tuple *ival = dict_find(iter, 1);
+  int bg = bgval->value->int32;
+  int i = ival->value->int8;
   persist_write_int(0, bg);
-  persist_write_int(1, fg);
-  setColors(bg, fg);
+  persist_write_int(1, i);
+  setColors(bg, i);
 }
 
 static void init() {  
