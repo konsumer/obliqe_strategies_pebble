@@ -58,19 +58,20 @@ $('button').on('click', function () {
   window.location = getQueryParam('return_to', 'pebblejs://close#') + encodeURIComponent(JSON.stringify(config))
 })
 
-if (window.localStorage.invert && window.localStorage.invert === 'true') {
-  $('#invert').attr('checked', true)
-}
+$(function () {
+  if (window.localStorage.invert && window.localStorage.invert === 'true') {
+    $('#invert').attr('checked', true)
+  }
 
-if (window.localStorage.color) {
-  $('#bg').val(window.localStorage.color)
-}
+  if (window.localStorage.color) {
+    $('#bg').val(window.localStorage.color)
+  }
 
-var has_color = getQueryParam('has_color', false)
-if (!has_color) {
-  $('#colorchoose').hide()
-}
-
+  var version = getQueryParam('version', 1)
+  if (version < 3) {
+    $('#colorchoose').hide()
+  }
+})
 </script>
 </body>
 </html>
