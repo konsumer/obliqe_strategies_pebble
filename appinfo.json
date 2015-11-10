@@ -1,7 +1,7 @@
 {
     "appKeys": {
-        "colorBackground": 0,
-        "colorForeground": 1
+        "color": 0,
+        "invert": 1
     },
     "capabilities": [
         "configurable"
