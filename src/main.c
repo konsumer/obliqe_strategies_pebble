@@ -137,17 +137,21 @@ static TextLayer *text_layer;
 static bool showing_time = true;
 
 static void setColors(int color, bool invert){
+  GColor fgcolor = GColorWhite;
+  GColor bgcolor = GColorBlack;
+  GColor tmp;
 #ifdef PBL_COLOR
-  GColor bgcolor = GColorFromHEX(color);
-  GColor fgcolor = gcolor_legible_over(bgcolor);
-  if (!invert){
+  fgcolor = GColorFromHEX(color);
+  bgcolor = gcolor_legible_over(fgcolor);
+#endif
+  if (invert){
+    tmp = bgcolor;
     bgcolor = fgcolor;
-    fgcolor = GColorFromHEX(color);
+    fgcolor = tmp;
   }
   window_set_background_color(window_time, bgcolor);
   text_layer_set_background_color(time_layer, bgcolor);
   text_layer_set_text_color(time_layer, fgcolor);
-#endif
 }
 
 static void update_time() {
