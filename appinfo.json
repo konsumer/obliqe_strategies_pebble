@@ -1,7 +1,7 @@
 {
     "appKeys": {
-        "colorBackground": 1,
-        "colorForeground": 0
+        "colorBackground": 0,
+        "colorForeground": 1
     },
     "capabilities": [
         "configurable"
@@ -22,9 +22,7 @@
     "sdkVersion": "3",
     "shortName": "Oblique Strategies",
     "targetPlatforms": [
-        "aplite",
-        "basalt",
-        "chalk"
+        "basalt"
     ],
     "uuid": "5944380e-3840-4d5f-897d-e03b9d4904b5",
     "versionLabel": "1.2",

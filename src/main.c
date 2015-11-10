@@ -136,6 +136,14 @@ static Window *window_strategy;
 static TextLayer *text_layer;
 static bool showing_time = true;
 
+static void setColors(int bg, int fg){
+  GColor bgcolor = GColorFromHEX(bg);
+  window_set_background_color(window_time, bgcolor);
+  text_layer_set_background_color(time_layer, bgcolor);
+  GColor fgcolor = GColorFromHEX(fg);
+  text_layer_set_text_color(time_layer, fgcolor);
+}
+
 static void update_time() {
   if (showing_time){
     time_t temp = time(NULL); 
@@ -161,6 +169,7 @@ static void update_strategy(){
     text_layer_set_text_alignment(text_layer, GTextAlignmentCenter);
     layer_remove_child_layers(root_window);
     layer_add_child(root_window, text_layer_get_layer(text_layer));
+
   }
 }
 
@@ -172,8 +181,9 @@ static void window_load_time(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
   time_layer = text_layer_create(GRect(0, (bounds.size.h/2) - 26, bounds.size.w, 50));
-  text_layer_set_background_color(time_layer, GColorClear);
-  text_layer_set_text_color(time_layer, GColorBlack);
+  int bg = persist_read_int(0);
+  int fg = persist_read_int(1);
+  setColors(bg, fg);
   text_layer_set_text(time_layer, "00:00");
   text_layer_set_font(time_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_BAUHAS_SUBSET_48)));
   text_layer_set_text_alignment(time_layer, GTextAlignmentCenter);
@@ -205,6 +215,16 @@ static void window_unload_strategy(Window *window) {
   text_layer_destroy(text_layer);
 }
 
+static void inbox_received_handler(DictionaryIterator *iter, void *context) {
+  Tuple *bgcolor = dict_find(iter, 0);
+  Tuple *fgcolor = dict_find(iter, 1);
+  int bg = bgcolor->value->uint32;
+  int fg = fgcolor->value->uint32;
+  persist_write_int(0, bg);
+  persist_write_int(1, fg);
+  setColors(bg, fg);
+}
+
 static void init() {  
   window_time = window_create();
   window_set_window_handlers(window_time, (WindowHandlers) {
@@ -222,6 +242,9 @@ static void init() {
   
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
   accel_tap_service_subscribe(tap_handler);
+
+  app_message_register_inbox_received(inbox_received_handler);
+  app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
 }
 
 static void deinit() {
