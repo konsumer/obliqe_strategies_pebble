@@ -49,11 +49,12 @@ function getQueryParam (variable, defaultValue) {
 
 $('button').on('click', function () {
   window.localStorage.invert = $('#invert')[0].checked
-  window.localStorage.colorBackground = $('#bg').val()
+  window.localStorage.color = $('#bg').val()
   var config = {
     invert: window.localStorage.invert,
-    colorBackground: window.localStorage.colorBackground
+    color: window.localStorage.color
   }
+  console.log(config)
   window.location = getQueryParam('return_to', 'pebblejs://close#') + encodeURIComponent(JSON.stringify(config))
 })
 
@@ -61,8 +62,8 @@ if (window.localStorage.invert && window.localStorage.invert === 'true') {
   $('#invert').attr('checked', true)
 }
 
-if (window.localStorage.colorBackground) {
-  $('#bg').val(window.localStorage.colorBackground)
+if (window.localStorage.color) {
+  $('#bg').val(window.localStorage.color)
 }
 </script>
 </body>
