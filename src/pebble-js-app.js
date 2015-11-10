@@ -6,7 +6,7 @@ Pebble.addEventListener('showConfiguration', function () {
 
 Pebble.addEventListener('webviewclosed', function (e) {
   var config = JSON.parse(decodeURIComponent(e.response))
-  console.log(config)
+  console.log(JSON.stringify(config))
   Pebble.sendAppMessage({
     'color': parseInt(config.color, 16),
     'invert': config.invert
