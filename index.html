@@ -12,7 +12,7 @@
   <div class='item-container'>
     <div class='item-container-header'>Colors</div>
     <div class='item-container-content'>
-      <label class='item'>
+      <label class='item' id="colorchoose">
         Color
         <input id='bg' type='text' class='item-color item-color-sunny' value='0x000000'>
       </label>
@@ -65,6 +65,12 @@ if (window.localStorage.invert && window.localStorage.invert === 'true') {
 if (window.localStorage.color) {
   $('#bg').val(window.localStorage.color)
 }
+
+var has_color = getQueryParam('has_color', false)
+if (!has_color) {
+  $('#colorchoose').hide()
+}
+
 </script>
 </body>
 </html>
