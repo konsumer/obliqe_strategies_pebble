@@ -23,7 +23,7 @@ function getWatchVersion() {
 }
 
 Pebble.addEventListener('showConfiguration', function () {
-  var url = 'http://konsumer.github.io/obliqe_strategies_pebble?version=' + getWatchVersion()
+  var url = 'http://konsumer.github.io/obliqe_strategies_pebble/?version=' + getWatchVersion()
   Pebble.openURL(url)
 })
 
