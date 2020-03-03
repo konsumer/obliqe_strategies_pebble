@@ -5,4 +5,4 @@ This adds the 3rd edition of [Oblique Strategies](https://en.wikipedia.org/wiki/
 ![time](./screens/time.png)
 ![strategy](./screens/text.png)
 
-THe Pebble store no longer exists, but I did port this to [Fitbit watches](https://github.com/konsumer/fitbit-watches).
+The Pebble store no longer exists, but I did port this to [Fitbit watches](https://github.com/konsumer/fitbit-watches).
